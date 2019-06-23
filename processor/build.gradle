@@ -1,0 +1,4 @@
+dependencies {
+    compileOnly fileTree(dir: "$System.env.JAVA_HOME/lib", include: ['*.jar'])
+    implementation  project(":interfaces")
+}

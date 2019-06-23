@@ -1,0 +1,49 @@
+allprojects{ 
+	apply plugin: 'java'
+	apply plugin: 'maven'
+	group GROUP_ID
+	version LIBRARY_VERSION
+	sourceCompatibility = SOURCE_VERSION
+	
+	dependencies { 
+		testImplementation "junit:junit:${JUNIT_VERSION}"
+	}
+
+	uploadArchives{
+		repositories {
+			mavenDeployer{
+				repository(url:LOCAL_REPORT_URL){
+					authentication(userName: USER_NAME, password: USER_PWD)
+				}
+				pom.project{
+					version LIBRARY_VERSION
+					groupId GROUP_ID
+					packaging 'jar'
+					artifactId project.name
+				}
+			}
+		}
+	}
+	tasks.withType(JavaCompile) {
+		options.encoding = "UTF-8"
+	}
+	task javadocJar(type: Jar, dependsOn: javadoc) {
+		classifier = 'javadoc'
+		from 'build/docs/javadoc'
+	}
+
+	task sourcesJar(type: Jar) {
+		classifier = 'sources'
+		from sourceSets.main.allSource
+		from project.buildFile
+	}
+	artifacts {
+		archives sourcesJar
+	}
+	jar {
+		manifest {
+			attributes('Implementation-Title': project.name,
+					'Implementation-Version': LIBRARY_VERSION)
+		}
+	}
+}

@@ -1,0 +1,10 @@
+apply plugin: 'application'
+
+application{
+    mainClassName="cn.zhg.preprocessor.demo.Main"
+} 
+dependencies { 
+    implementation "xiaogen.util:logger:+"
+    compileOnly  project(":interfaces")
+    annotationProcessor project(":processor") 
+} 
